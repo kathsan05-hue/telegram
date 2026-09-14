@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#070707" />
+<title>Apolo System · Señales gratis en Telegram</title>
+<meta name="description" content="Señales de trading gratis en nuestro canal de Telegram + Scanner IA semiautomático para operar cualquier activo. Únete gratis." />
+
+<meta property="og:title" content="Apolo System · Señales gratis en Telegram" />
+<meta property="og:description" content="Recibe las señales en tiempo real y opera con asistencia de IA. 100% gratis. Únete al canal." />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="logo.png" />
+
+<link rel="icon" type="image/png" href="logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Sora:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#070707;
+  --panel:#111113;
+  --panel-2:#161618;
+  --line:rgba(255,255,255,.08);
+  --line-strong:rgba(255,255,255,.14);
+  --text:#e9e9ec;
+  --muted:#8a8a92;
+  --silver:#cfd0d4;
+  --silver-2:#9a9ba1;
+  --gold:#f5a23a;
+  --gold-2:#ff7a18;
+  --cian:#2ec5e0;
+  --green:#3ddc97;
+  --red:#ff5c6c;
+  --tg:#229ED9;
+  --tg-2:#1a7eb0;
+  --wa:#25D366;
+  --wa-2:#1ebe5d;
+}
+
+html{scroll-behavior:smooth}
+body{
+  font-family:'Sora',system-ui,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  font-weight:300;
+  line-height:1.6;
+}
+
+/* Background atmosphere */
+#cosmos-canvas{position:fixed;inset:0;z-index:-2;pointer-events:none;width:100%;height:100%}
+.bg-atmosphere{
+  position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(900px 600px at 85% -10%, rgba(245,162,58,.10), transparent 60%),
+    radial-gradient(700px 500px at 0% 30%, rgba(255,122,24,.06), transparent 60%),
+    radial-gradient(1000px 700px at 50% 110%, rgba(245,162,58,.05), transparent 65%);
+}
+body::before{
+  content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
+  background-size:40px 40px;
+  mask-image:radial-gradient(ellipse at center, black 40%, transparent 80%);
+}
+
+/* TICKER */
+@keyframes ticker{to{transform:translateX(-50%)}}
+.ticker-wrap{
+  overflow:hidden;
+  background:rgba(245,162,58,.04);
+  border-bottom:1px solid rgba(245,162,58,.15);
+  border-top:1px solid rgba(245,162,58,.15);
+  padding:10px 0;position:relative;z-index:2;
+}
+.ticker-inner{display:flex;white-space:nowrap;animation:ticker 38s linear infinite;width:max-content}
+.ticker-inner span{
+  padding:0 30px;color:var(--gold);
+  font-family:'JetBrains Mono',monospace;
+  font-size:11.5px;font-weight:500;
+  letter-spacing:.18em;text-transform:uppercase;
+}
+.ticker-sep{color:rgba(245,162,58,.3) !important;padding:0 4px !important}
+
+/* Pulse animation */
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.75)}}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green);animation:pulse 1.6s ease-in-out infinite}
+
+/* Container */
+.container{max-width:760px;margin:0 auto;padding:0 22px;position:relative}
+section{position:relative;z-index:1}
+
+/* HERO */
+.hero{padding:56px 0 36px;text-align:center;position:relative;overflow:hidden}
+.hero-logo{
+  width:90px;height:90px;border-radius:50%;
+  margin:0 auto 22px;
+  border:1px solid var(--line-strong);
+  box-shadow:0 0 0 1px rgba(245,162,58,.2), 0 0 60px rgba(245,162,58,.3);
+  animation:float 6s ease-in-out infinite;
+}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+.eyebrow{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:7px 14px;border-radius:999px;
+  background:rgba(61,220,151,.06);
+  border:1px solid rgba(61,220,151,.22);
+  font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.22em;
+  color:var(--green);text-transform:uppercase;margin-bottom:24px;
+}
+
+.hero h1{
+  font-family:'Cinzel',serif;
+  font-size:clamp(32px,7vw,56px);
+  font-weight:600;letter-spacing:.03em;line-height:1.06;
+  margin-bottom:18px;
+  background:linear-gradient(180deg,#fff 0%, #c9cacf 60%, #6f7079 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero h1 em{
+  font-style:italic;font-weight:600;
+  background:linear-gradient(180deg,var(--gold),var(--gold-2));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+
+.hero p.lead{
+  font-size:15px;color:var(--silver-2);
+  max-width:520px;margin:0 auto 32px;font-weight:300;
+}
+
+.btn-tg{
+  display:inline-flex;align-items:center;justify-content:center;gap:12px;
+  width:100%;max-width:440px;margin:0 auto;
+  padding:18px 32px;border-radius:14px;
+  background:linear-gradient(135deg, var(--tg) 0%, var(--tg-2) 100%);
+  box-shadow:0 0 32px rgba(34,158,217,.35), 0 8px 24px -8px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.18);
+  color:#fff;font-family:inherit;font-weight:700;font-size:15px;
+  text-decoration:none;letter-spacing:.04em;
+  transition:transform .2s, box-shadow .2s;
+  border:none;cursor:pointer;
+}
+.btn-tg:hover{transform:translateY(-2px);box-shadow:0 0 48px rgba(34,158,217,.55), 0 12px 28px -8px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.22)}
+.btn-tg:active{transform:translateY(0)}
+.btn-tg svg{flex-shrink:0}
+
+/* BOTÓN WHATSAPP */
+.btn-wa{
+  display:inline-flex;align-items:center;justify-content:center;gap:12px;
+  width:100%;max-width:440px;margin:0 auto;
+  padding:18px 32px;border-radius:14px;
+  background:linear-gradient(135deg, var(--wa) 0%, var(--wa-2) 100%);
+  box-shadow:0 0 32px rgba(37,211,102,.35), 0 8px 24px -8px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.18);
+  color:#fff;font-family:inherit;font-weight:700;font-size:15px;
+  text-decoration:none;letter-spacing:.04em;
+  transition:transform .2s, box-shadow .2s;
+  border:none;cursor:pointer;
+}
+.btn-wa:hover{transform:translateY(-2px);box-shadow:0 0 48px rgba(37,211,102,.55), 0 12px 28px -8px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.22)}
+.btn-wa:active{transform:translateY(0)}
+.btn-wa svg{flex-shrink:0}
+
+/* DUAL BUTTONS (WhatsApp + Telegram lado a lado) */
+.btn-duo{
+  display:flex;
+  gap:10px;
+  max-width:440px;
+  margin:0 auto;
+  width:100%;
+}
+.btn-duo .btn-wa,
+.btn-duo .btn-tg{
+  flex:1;
+  max-width:none;
+  margin:0;
+  padding:14px 18px;
+  font-size:13px;
+  gap:8px;
+  letter-spacing:.03em;
+}
+.btn-duo svg{width:18px;height:18px}
+@media(max-width:380px){
+  .btn-duo .btn-wa,
+  .btn-duo .btn-tg{padding:13px 12px;font-size:12px}
+  .btn-duo svg{width:16px;height:16px}
+}
+
+.hero-sub{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10.5px;color:var(--muted);
+  margin-top:14px;letter-spacing:.18em;text-transform:uppercase;
+}
+
+/* AUDIT BADGE */
+.audit-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:8px 14px;margin-top:24px;border-radius:999px;
+  background:rgba(61,220,151,.05);
+  border:1px solid rgba(61,220,151,.18);
+  font-family:'JetBrains Mono',monospace;
+  font-size:10.5px;color:var(--silver-2);letter-spacing:.06em;
+}
+.audit-badge a{color:var(--green);text-decoration:none;border-bottom:1px dashed rgba(61,220,151,.4);font-weight:500}
+.audit-badge a:hover{color:#5ce5b0}
+
+/* ============= QUIÉNES SOMOS ============= */
+.about{padding:30px 0 20px}
+.about-card{
+  background:linear-gradient(180deg,var(--panel),var(--panel-2));
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:28px 26px;
+  position:relative;overflow:hidden;
+  box-shadow:0 30px 60px -30px rgba(0,0,0,.7);
+}
+.about-card::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(460px 240px at 0% 0%, rgba(46,197,224,.08), transparent 60%);
+}
+.about-flag{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:5px 12px;border-radius:999px;
+  background:rgba(46,197,224,.10);
+  border:1px solid rgba(46,197,224,.3);
+  font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--cian);
+  letter-spacing:.2em;text-transform:uppercase;margin-bottom:18px;
+}
+.about-card h2{
+  font-family:'Cinzel',serif;font-weight:600;
+  font-size:clamp(22px,4vw,30px);letter-spacing:.02em;line-height:1.15;
+  background:linear-gradient(180deg,#fff,#c9cacf);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  margin-bottom:14px;position:relative;
+}
+.about-card p{color:var(--silver-2);font-size:14.5px;margin-bottom:14px;position:relative}
+.about-card p:last-of-type{margin-bottom:0}
+.about-card p strong{color:var(--text);font-weight:500}
+.about-card .accent{
+  background:linear-gradient(180deg,var(--gold),var(--gold-2));
+  -webkit-background-clip:text;background-clip:text;color:transparent;font-weight:500;
+}
+
+.about-points{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:9px;
+  margin-top:20px;position:relative;
+}
+@media(max-width:420px){.about-points{grid-template-columns:1fr}}
+.about-point{
+  display:flex;align-items:center;gap:9px;
+  background:rgba(255,255,255,.025);
+  border:1px solid var(--line);
+  border-radius:10px;padding:9px 11px;
+}
+.about-point .ico{
+  flex-shrink:0;width:26px;height:26px;border-radius:7px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(245,162,58,.12);color:var(--gold);
+}
+.about-point .ico svg{width:14px;height:14px}
+.about-point .txt strong{display:block;color:var(--text);font-size:12px;font-weight:600;line-height:1.3}
+.about-point .txt span{color:var(--muted);font-size:10.5px;line-height:1.35}
+
+/* ============= NUESTROS SISTEMAS ============= */
+.systems{padding:36px 0 40px}
+.sys-head{text-align:center;margin-bottom:28px}
+.sys-head .tag{
+  display:inline-block;font-family:'JetBrains Mono',monospace;
+  font-size:10.5px;color:var(--gold);letter-spacing:.22em;text-transform:uppercase;margin-bottom:10px;
+}
+.sys-head h2{
+  font-family:'Cinzel',serif;font-weight:600;
+  font-size:clamp(22px,4vw,30px);letter-spacing:.02em;
+  background:linear-gradient(180deg,#fff,#9a9ba1);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.sys-head p{color:var(--silver-2);font-size:13.5px;margin-top:6px;max-width:520px;margin-left:auto;margin-right:auto}
+
+.sys-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.sys-grid .sys-card:first-child{grid-column:1 / -1}
+@media(max-width:560px){.sys-grid{grid-template-columns:1fr}}
+
+.sys-card{
+  position:relative;
+  background:linear-gradient(180deg,var(--panel),var(--panel-2));
+  border:1px solid var(--line);
+  border-radius:16px;overflow:hidden;
+  cursor:zoom-in;
+  display:flex;flex-direction:column;
+  transition:transform .3s cubic-bezier(.4,0,.2,1), border-color .3s, box-shadow .3s;
+  box-shadow:0 10px 30px -15px rgba(0,0,0,.6);
+}
+.sys-card:hover{transform:translateY(-6px);box-shadow:0 20px 40px -15px rgba(0,0,0,.7)}
+.sys-card.cian:hover{border-color:rgba(46,197,224,.45);box-shadow:0 20px 40px -15px rgba(0,0,0,.7),0 0 30px -10px rgba(46,197,224,.3)}
+.sys-card.gold:hover{border-color:rgba(245,162,58,.45);box-shadow:0 20px 40px -15px rgba(0,0,0,.7),0 0 30px -10px rgba(245,162,58,.3)}
+.sys-card.red:hover{border-color:rgba(255,92,108,.45);box-shadow:0 20px 40px -15px rgba(0,0,0,.7),0 0 30px -10px rgba(255,92,108,.3)}
+
+.sys-img-wrap{position:relative;background:#0a0a0b;overflow:hidden}
+.sys-img-wrap img{width:100%;height:auto;display:block;transition:transform .5s cubic-bezier(.4,0,.2,1)}
+.sys-card:hover .sys-img-wrap img{transform:scale(1.03)}
+.sys-grid .sys-card:first-child .sys-img-wrap img{max-height:360px;object-fit:cover;object-position:center}
+.sys-grid .sys-card:not(:first-child) .sys-img-wrap img{max-height:420px;object-fit:cover;object-position:right center}
+
+.sys-tag{
+  position:absolute;top:10px;left:10px;z-index:3;
+  display:inline-flex;align-items:center;gap:5px;
+  padding:5px 10px;border-radius:6px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.cian .sys-tag{background:rgba(46,197,224,.92);color:#02181d}
+.gold .sys-tag{background:rgba(245,162,58,.92);color:#1a0d00}
+.red  .sys-tag{background:rgba(255,92,108,.92);color:#1a0206}
+
+.sys-body{padding:16px 16px 18px;display:flex;flex-direction:column;flex:1;border-top:1px solid var(--line);background:rgba(0,0,0,.25)}
+.sys-body h3{font-family:'Cinzel',serif;font-size:16px;font-weight:600;letter-spacing:.03em;margin-bottom:5px}
+.sys-body .sub{color:var(--silver-2);font-size:12px;line-height:1.5;margin-bottom:14px;flex:1}
+.sys-stats{display:flex;gap:8px;padding-top:12px;border-top:1px solid var(--line)}
+.sys-stats .stat{flex:1;text-align:center}
+.sys-stats .stat .v{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:500;line-height:1}
+.cian .sys-stats .stat .v{color:var(--cian)}
+.gold .sys-stats .stat .v{color:var(--gold)}
+.red  .sys-stats .stat .v{color:var(--red)}
+.sys-stats .stat .l{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;font-family:'JetBrains Mono',monospace}
+
+.sys-note{
+  text-align:center;margin-top:20px;
+  font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);
+  letter-spacing:.08em;
+}
+
+/* CTA general debajo de sistemas */
+.sys-cta{text-align:center;padding:24px 0 6px}
+.sys-cta p{font-size:13px;color:var(--silver-2);margin-bottom:18px;font-style:italic}
+
+/* ============= LIGHTBOX ============= */
+.lightbox{
+  display:none;
+  position:fixed;inset:0;z-index:999;
+  background:rgba(0,0,0,.92);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  align-items:center;justify-content:center;
+  padding:30px;cursor:zoom-out;
+  animation:lbFadeIn .3s ease;
+}
+@keyframes lbFadeIn{from{opacity:0}to{opacity:1}}
+.lightbox.active{display:flex}
+.lightbox-img{
+  max-width:95%;max-height:92vh;
+  border-radius:12px;
+  box-shadow:0 40px 80px -20px rgba(0,0,0,.8), 0 0 60px -10px rgba(245,162,58,.25);
+  border:1px solid rgba(245,162,58,.2);
+}
+.lightbox-close{
+  position:absolute;top:20px;right:30px;
+  color:#fff;font-size:40px;font-weight:300;
+  cursor:pointer;line-height:1;
+  width:48px;height:48px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:50%;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.15);
+  transition:background .2s, transform .2s;
+}
+.lightbox-close:hover{background:rgba(245,162,58,.2);transform:rotate(90deg)}
+
+/* FOOTER */
+footer{
+  border-top:1px solid var(--line);padding:24px 22px;text-align:center;
+  font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--muted);letter-spacing:.08em;
+}
+footer a{color:var(--gold);text-decoration:none}
+.disclaimer{font-size:10.5px;color:var(--muted);text-align:center;padding:0 22px 24px;max-width:680px;margin:0 auto;line-height:1.7}
+
+/* Reveal */
+.reveal{opacity:0;transform:translateY(15px);transition:opacity .8s ease, transform .8s ease}
+.reveal.in{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<canvas id="cosmos-canvas"></canvas>
+<div class="bg-atmosphere"></div>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-inner">
+    <span>🥇 XAU/USD</span><span class="ticker-sep">·</span>
+    <span>💱 EUR/USD</span><span class="ticker-sep">·</span>
+    <span>💎 GBP/USD</span><span class="ticker-sep">·</span>
+    <span>📊 US30</span><span class="ticker-sep">·</span>
+    <span>💻 NAS100</span><span class="ticker-sep">·</span>
+    <span>📈 SPX500</span><span class="ticker-sep">·</span>
+    <span>₿ BTC/USDT</span><span class="ticker-sep">·</span>
+    <span>⚡ Scanner IA Multi-Activo</span><span class="ticker-sep">·</span>
+    <span>★ Señales Gratis 24/7</span><span class="ticker-sep">·</span>
+    <span>🥇 XAU/USD</span><span class="ticker-sep">·</span>
+    <span>💱 EUR/USD</span><span class="ticker-sep">·</span>
+    <span>💎 GBP/USD</span><span class="ticker-sep">·</span>
+    <span>📊 US30</span><span class="ticker-sep">·</span>
+    <span>💻 NAS100</span><span class="ticker-sep">·</span>
+    <span>📈 SPX500</span><span class="ticker-sep">·</span>
+    <span>₿ BTC/USDT</span><span class="ticker-sep">·</span>
+    <span>⚡ Scanner IA Multi-Activo</span><span class="ticker-sep">·</span>
+    <span>★ Señales Gratis 24/7</span><span class="ticker-sep">·</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <img src="logo.png" alt="Apolo System" class="hero-logo" />
+    <div class="eyebrow"><span class="dot"></span> Señales gratis en vivo</div>
+    <h1>Señales reales,<br/><em>directo a tu Telegram.</em></h1>
+    <p class="lead">Únete gratis al canal donde compartimos señales, análisis y actualizaciones del mercado en tiempo real. Sin formularios, sin tarjeta, sin pagos.</p>
+
+    <div class="btn-duo">
+      <a href="https://wa.link/7yufq9" target="_blank" rel="noopener" class="btn-wa">
+        <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+        WhatsApp
+      </a>
+      <a href="https://t.me/MetodoApolo" target="_blank" rel="noopener" class="btn-tg">
+        <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        Telegram
+      </a>
+    </div>
+    <p class="hero-sub">Acceso inmediato · Sin registro · Sin tarjeta</p>
+  </div>
+</section>
+
+<!-- QUIÉNES SOMOS -->
+<section class="about">
+  <div class="container">
+    <div class="about-card reveal">
+      <span class="about-flag">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        Quiénes somos
+      </span>
+      <h2>Herramientas reales, comunidad de verdad</h2>
+      <p>Desarrollamos <span class="accent">herramientas validadas con estadísticas reales de varios años</span>, optimizadas para cada mercado. Y lo que nos diferencia: una <strong>comunidad privada</strong> con acompañamiento completo, no un indicador y ya.</p>
+
+      <div class="about-points">
+        <div class="about-point">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-3"/></svg></span>
+          <span class="txt"><strong>Estadísticas de años</strong><span>Datos auditables y reales.</span></span>
+        </div>
+        <div class="about-point">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></span>
+          <span class="txt"><strong>Operativas en vivo</strong><span>Operamos juntos cada semana.</span></span>
+        </div>
+        <div class="about-point">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></span>
+          <span class="txt"><strong>Paso a paso completo</strong><span>Todo grabado, desde cero.</span></span>
+        </div>
+        <div class="about-point">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></span>
+          <span class="txt"><strong>Contacto directo</strong><span>Soporte por WhatsApp y Telegram.</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NUESTROS SISTEMAS -->
+<section class="systems">
+  <div class="container">
+    <div class="sys-head reveal">
+      <div class="tag">— Escáneres en vivo</div>
+      <h2>Estos son nuestros sistemas</h2>
+      <p>Tres escáneres especializados, cada uno optimizado para su mercado. Estadísticas del histórico visible, sin repintado.</p>
+    </div>
+
+    <div class="sys-grid reveal">
+
+      <!-- Apolo (Universal) -->
+      <div class="sys-card cian" data-img="apolo.png">
+        <div class="sys-img-wrap">
+          <span class="sys-tag">Multi-activo</span>
+          <img src="apolo.png" alt="Apolo Scanner en NAS100" loading="lazy" />
+        </div>
+        <div class="sys-body">
+          <h3>Apolo</h3>
+          <p class="sub">Forex, metales, índices y cripto. Se adapta automáticamente a cualquier activo y temporalidad.</p>
+          <div class="sys-stats">
+            <div class="stat"><div class="v">79.2%</div><div class="l">Win Rate</div></div>
+            <div class="stat"><div class="v">3.59</div><div class="l">Profit F.</div></div>
+            <div class="stat"><div class="v">1–5★</div><div class="l">Calidad</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Apolo Gold -->
+      <div class="sys-card gold" data-img="apolo-gold.png">
+        <div class="sys-img-wrap">
+          <span class="sys-tag">Oro · XAUUSD</span>
+          <img src="apolo-gold.png" alt="Apolo Gold en XAUUSD" loading="lazy" />
+        </div>
+        <div class="sys-body">
+          <h3>Apolo Gold</h3>
+          <p class="sub">Nuestro escáner estrella, optimizado para operar el oro en marcos temporales cortos.</p>
+          <div class="sys-stats">
+            <div class="stat"><div class="v">75.9%</div><div class="l">Win Rate</div></div>
+            <div class="stat"><div class="v">3.15</div><div class="l">Profit F.</div></div>
+            <div class="stat"><div class="v">1–5★</div><div class="l">Calidad</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Apolo Deriv -->
+      <div class="sys-card red" data-img="apolo-deriv.png">
+        <div class="sys-img-wrap">
+          <span class="sys-tag">Sintéticos Deriv</span>
+          <img src="apolo-deriv.png" alt="Apolo Deriv en Boom 900" loading="lazy" />
+        </div>
+        <div class="sys-body">
+          <h3>Apolo Deriv</h3>
+          <p class="sub">Especializado en índices sintéticos Crash y Boom, operando a favor de la probabilidad del movimiento.</p>
+          <div class="sys-stats">
+            <div class="stat"><div class="v">76%</div><div class="l">Efectividad</div></div>
+            <div class="stat"><div class="v">4.8</div><div class="l">Profit F.</div></div>
+            <div class="stat"><div class="v">1–5★</div><div class="l">Calidad</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="sys-note">Estadísticas del histórico visible · sin repintado · toca una imagen para ampliarla</p>
+
+    <!-- CTA -->
+    <div class="sys-cta reveal">
+      <p>Solicita acceso y opera con el sistema que mejor se adapte a ti.</p>
+      <a href="https://t.me/MetodoApolo" target="_blank" rel="noopener" class="btn-tg" style="max-width:none">
+        <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        Solicitar acceso en Telegram
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox para ver sistemas en grande -->
+<div class="lightbox" id="lightbox">
+  <span class="lightbox-close">&times;</span>
+  <img class="lightbox-img" id="lightbox-img" alt="" />
+</div>
+
+<!-- DISCLAIMER -->
+<div class="disclaimer">
+  ⚠ <strong>Aviso de riesgo:</strong> El trading de instrumentos financieros conlleva alto riesgo. Las señales y el Scanner IA son servicios educativos y de asistencia; no constituyen asesoramiento financiero. Cada usuario es responsable de sus decisiones.
+</div>
+
+<footer>
+  © 2026 APOLO · SYSTEM · <a href="https://t.me/MetodoApolo" target="_blank" rel="noopener">@MetodoApolo</a>
+</footer>
+
+<script>
+/* ===== Fondo cósmico (canvas estrellado, optimizado para mobile) ===== */
+(function cosmos(){
+  const canvas=document.getElementById('cosmos-canvas');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  let w,h,stars=[],shoots=[];
+  const N=window.innerWidth<720?50:100;
+
+  function resize(){
+    w=canvas.width=window.innerWidth*devicePixelRatio;
+    h=canvas.height=window.innerHeight*devicePixelRatio;
+    canvas.style.width=window.innerWidth+'px';
+    canvas.style.height=window.innerHeight+'px';
+  }
+  resize();window.addEventListener('resize',resize);
+
+  for(let i=0;i<N;i++){
+    stars.push({
+      x:Math.random()*w,y:Math.random()*h,
+      r:Math.random()*1.3*devicePixelRatio+0.3,
+      a:Math.random()*0.5+0.2,
+      vx:(Math.random()-0.5)*0.05,vy:(Math.random()-0.5)*0.05,
+      tw:Math.random()*0.018+0.005,d:1,
+      g:Math.random()>0.88
+    });
+  }
+  function spawn(){
+    if(Math.random()>0.996){
+      shoots.push({
+        x:Math.random()*w*0.6,y:Math.random()*h*0.4,
+        len:70*devicePixelRatio+Math.random()*70*devicePixelRatio,
+        spd:4*devicePixelRatio+Math.random()*3*devicePixelRatio,
+        ang:Math.PI/4+(Math.random()-0.5)*0.3,life:1
+      });
+    }
+  }
+  function draw(){
+    ctx.clearRect(0,0,w,h);
+    for(const s of stars){
+      s.x+=s.vx;s.y+=s.vy;
+      if(s.x<0)s.x=w;if(s.x>w)s.x=0;if(s.y<0)s.y=h;if(s.y>h)s.y=0;
+      s.a+=s.tw*s.d;if(s.a>0.85||s.a<0.15)s.d*=-1;
+      ctx.beginPath();
+      ctx.fillStyle=s.g?`rgba(245,162,58,${s.a})`:`rgba(255,255,255,${s.a})`;
+      ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fill();
+    }
+    spawn();shoots=shoots.filter(s=>s.life>0);
+    for(const s of shoots){
+      const dx=Math.cos(s.ang)*s.len,dy=Math.sin(s.ang)*s.len;
+      const g=ctx.createLinearGradient(s.x,s.y,s.x+dx,s.y+dy);
+      g.addColorStop(0,`rgba(245,162,58,${0.8*s.life})`);
+      g.addColorStop(1,'rgba(245,162,58,0)');
+      ctx.strokeStyle=g;ctx.lineWidth=1.5*devicePixelRatio;
+      ctx.beginPath();ctx.moveTo(s.x,s.y);ctx.lineTo(s.x+dx,s.y+dy);ctx.stroke();
+      s.x+=Math.cos(s.ang)*s.spd;s.y+=Math.sin(s.ang)*s.spd;s.life-=0.013;
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ===== Reveal on scroll ===== */
+const io=new IntersectionObserver(es=>{
+  es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}});
+},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* ===== LIGHTBOX para sistemas ===== */
+(function(){
+  const lb=document.getElementById('lightbox');
+  const lbImg=document.getElementById('lightbox-img');
+  const closeBtn=document.querySelector('.lightbox-close');
+  if(!lb)return;
+
+  document.querySelectorAll('.sys-card').forEach(card=>{
+    card.addEventListener('click',()=>{
+      const src=card.dataset.img;
+      if(!src)return;
+      lbImg.src=src;
+      lb.classList.add('active');
+      document.body.style.overflow='hidden';
+    });
+  });
+
+  function close(){
+    lb.classList.remove('active');
+    document.body.style.overflow='';
+    setTimeout(()=>lbImg.src='',300);
+  }
+  lb.addEventListener('click',e=>{if(e.target===lb||e.target===closeBtn)close()});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
+})();
+</script>
+
+</body>
+</html>
