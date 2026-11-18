@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#0A0A0A" />
+<title>Apolo · Señales y escáneres de trading</title>
+<meta name="description" content="Herramientas de trading validadas con años de estadísticas reales + una comunidad privada con acompañamiento completo. Entra gratis por WhatsApp o Telegram." />
+
+<meta property="og:title" content="Apolo · Señales y escáneres de trading" />
+<meta property="og:description" content="Escáneres reales, comunidad de verdad. Entra gratis por WhatsApp o Telegram." />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="logo.png" />
+
+<link rel="icon" type="image/png" href="logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,600&family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#0A0A0A;
+  --panel:#121212;
+  --panel-2:#151515;
+  --line:rgba(255,255,255,.08);
+  --line-strong:rgba(255,255,255,.15);
+  --text:#F7F5F2;
+  --muted:#8c8c90;
+  --muted-2:#a9a9ad;
+  --orange:#EE582D;
+  --orange-soft:#ff7a4d;
+  --orange-deep:#c7431d;
+  --wa:#25D366;
+  --wa-2:#1ebe5d;
+  --tg:#2AABEE;
+  --tg-2:#1b92d1;
+}
+
+html{scroll-behavior:smooth}
+body{
+  font-family:'Poppins',system-ui,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  font-weight:400;
+  line-height:1.55;
+  letter-spacing:-.01em;
+}
+
+/* palabra clave estilo marca */
+.key{
+  font-family:'DM Serif Display',serif;
+  font-style:italic;
+  color:var(--orange);
+  font-weight:400;
+}
+
+/* ===== Fondo ===== */
+#cosmos-canvas{position:fixed;inset:0;z-index:-2;pointer-events:none;width:100%;height:100%}
+.bg-atmosphere{
+  position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(900px 620px at 82% -12%, rgba(238,88,45,.16), transparent 60%),
+    radial-gradient(760px 520px at 0% 22%, rgba(238,88,45,.07), transparent 62%),
+    radial-gradient(1100px 760px at 50% 116%, rgba(238,88,45,.08), transparent 66%);
+}
+body::before{
+  content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.022) 1px, transparent 1px);
+  background-size:44px 44px;
+  mask-image:radial-gradient(ellipse at center, black 35%, transparent 82%);
+}
+/* grano sutil */
+body::after{
+  content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.04;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ===== Ticker ===== */
+@keyframes ticker{to{transform:translateX(-50%)}}
+.ticker-wrap{
+  overflow:hidden;position:relative;z-index:3;
+  background:rgba(238,88,45,.06);
+  border-top:1px solid rgba(238,88,45,.22);
+  border-bottom:1px solid rgba(238,88,45,.22);
+  padding:9px 0;
+}
+.ticker-inner{display:flex;white-space:nowrap;animation:ticker 40s linear infinite;width:max-content}
+.ticker-inner span{
+  padding:0 26px;color:var(--orange-soft);
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+}
+.ticker-sep{color:rgba(238,88,45,.4) !important;padding:0 2px !important}
+
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.7)}}
+
+/* ===== Container ===== */
+.container{max-width:780px;margin:0 auto;padding:0 20px;position:relative}
+section{position:relative;z-index:1}
+
+/* ===== HERO ===== */
+.hero{padding:50px 0 30px;text-align:center}
+.hero-logo{
+  width:84px;height:84px;border-radius:50%;margin:0 auto 20px;
+  border:1px solid rgba(238,88,45,.4);
+  box-shadow:0 0 0 1px rgba(238,88,45,.15), 0 0 54px rgba(238,88,45,.45);
+  animation:float 6s ease-in-out infinite;
+}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+
+.eyebrow{
+  display:inline-flex;align-items:center;gap:9px;
+  padding:7px 15px;border-radius:999px;
+  background:rgba(238,88,45,.1);
+  border:1px solid rgba(238,88,45,.32);
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;
+  color:var(--orange-soft);text-transform:uppercase;margin-bottom:22px;font-weight:500;
+}
+.eyebrow .ld{width:7px;height:7px;border-radius:50%;background:var(--orange);box-shadow:0 0 12px var(--orange);animation:pulse 1.6s ease-in-out infinite}
+
+.hero h1{
+  font-family:'Poppins',sans-serif;font-weight:900;
+  font-size:clamp(34px,8vw,62px);line-height:.98;letter-spacing:-.03em;
+  margin-bottom:20px;text-transform:uppercase;
+}
+.hero h1 .key{text-transform:none;font-size:1.12em;display:inline-block;line-height:.9}
+
+.hero p.lead{
+  font-size:15.5px;color:var(--muted-2);font-weight:400;
+  max-width:500px;margin:0 auto 30px;
+}
+.hero p.lead b{color:var(--text);font-weight:600}
+
+/* ===== Botones ===== */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:11px;
+  font-family:'Poppins',sans-serif;font-weight:700;font-size:15px;letter-spacing:-.01em;
+  padding:17px 30px;border-radius:15px;text-decoration:none;border:none;cursor:pointer;
+  transition:transform .18s cubic-bezier(.34,1.56,.64,1), box-shadow .2s, filter .2s;
+  position:relative;overflow:hidden;
+}
+.btn svg{flex-shrink:0;position:relative;z-index:1}
+.btn span{position:relative;z-index:1}
+.btn::after{content:'';position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.22) 50%,transparent 70%);transform:translateX(-120%);transition:transform .6s}
+.btn:hover::after{transform:translateX(120%)}
+.btn:active{transform:scale(.97)}
+
+.btn-wa{background:linear-gradient(135deg,var(--wa),var(--wa-2));color:#04210f;box-shadow:0 0 30px rgba(37,211,102,.32),0 10px 24px -10px rgba(0,0,0,.6)}
+.btn-wa:hover{transform:translateY(-3px);box-shadow:0 0 44px rgba(37,211,102,.5),0 14px 30px -10px rgba(0,0,0,.7)}
+.btn-tg{background:linear-gradient(135deg,var(--tg),var(--tg-2));color:#042233;box-shadow:0 0 30px rgba(42,171,238,.32),0 10px 24px -10px rgba(0,0,0,.6)}
+.btn-tg:hover{transform:translateY(-3px);box-shadow:0 0 44px rgba(42,171,238,.5),0 14px 30px -10px rgba(0,0,0,.7)}
+.btn-orange{background:linear-gradient(135deg,var(--orange),var(--orange-deep));color:#fff;box-shadow:0 0 34px rgba(238,88,45,.4),0 10px 24px -10px rgba(0,0,0,.6)}
+.btn-orange:hover{transform:translateY(-3px);box-shadow:0 0 50px rgba(238,88,45,.6),0 14px 30px -10px rgba(0,0,0,.7)}
+
+.btn-duo{display:flex;gap:11px;max-width:440px;margin:0 auto;width:100%}
+.btn-duo .btn{flex:1;padding:16px 16px;font-size:14.5px}
+.btn-duo svg{width:20px;height:20px}
+@media(max-width:380px){.btn-duo .btn{padding:14px 10px;font-size:13px;gap:7px}.btn-duo svg{width:17px;height:17px}}
+
+.hero-sub{
+  font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);
+  margin-top:15px;letter-spacing:.16em;text-transform:uppercase;
+}
+
+/* ===== STATS STRIP ===== */
+.stats-strip{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+  margin:34px auto 0;max-width:500px;
+  background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden;
+}
+.stat-item{background:var(--panel);padding:18px 10px;text-align:center}
+.stat-item .num{
+  font-family:'Poppins',sans-serif;font-weight:900;font-size:clamp(24px,6vw,32px);
+  color:var(--orange);line-height:1;letter-spacing:-.02em;
+}
+.stat-item .lbl{
+  font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);
+  letter-spacing:.12em;text-transform:uppercase;margin-top:7px;
+}
+
+/* ===== Section heading genérico ===== */
+.sec-head{text-align:center;margin-bottom:26px}
+.sec-head .kicker{
+  display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;
+  color:var(--orange-soft);letter-spacing:.2em;text-transform:uppercase;margin-bottom:12px;font-weight:500;
+}
+.sec-head h2{
+  font-family:'Poppins',sans-serif;font-weight:900;text-transform:uppercase;
+  font-size:clamp(24px,5.4vw,38px);letter-spacing:-.025em;line-height:1.02;
+}
+.sec-head h2 .key{text-transform:none;font-size:1.1em}
+.sec-head p{color:var(--muted-2);font-size:14px;margin:10px auto 0;max-width:500px}
+
+/* ===== QUIÉNES SOMOS ===== */
+.about{padding:34px 0 18px}
+.about-card{
+  background:linear-gradient(170deg,var(--panel),var(--panel-2));
+  border:1px solid var(--line);border-radius:22px;padding:30px 26px;
+  position:relative;overflow:hidden;box-shadow:0 30px 60px -32px rgba(0,0,0,.8);
+}
+.about-card::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(420px 220px at 100% 0%, rgba(238,88,45,.1), transparent 62%)}
+.about-flag{
+  display:inline-flex;align-items:center;gap:8px;padding:5px 13px;border-radius:999px;
+  background:rgba(238,88,45,.12);border:1px solid rgba(238,88,45,.32);
+  font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--orange-soft);
+  letter-spacing:.18em;text-transform:uppercase;margin-bottom:16px;font-weight:500;position:relative;
+}
+.about-card h2{
+  font-family:'Poppins',sans-serif;font-weight:900;text-transform:uppercase;
+  font-size:clamp(22px,4.6vw,30px);letter-spacing:-.025em;line-height:1.05;margin-bottom:13px;position:relative;
+}
+.about-card h2 .key{text-transform:none;font-size:1.12em}
+.about-card p{color:var(--muted-2);font-size:14.5px;position:relative}
+.about-card p b{color:var(--text);font-weight:600}
+
+.about-points{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:20px;position:relative}
+@media(max-width:430px){.about-points{grid-template-columns:1fr}}
+.about-point{
+  display:flex;align-items:center;gap:10px;
+  background:rgba(255,255,255,.028);border:1px solid var(--line);
+  border-radius:12px;padding:10px 12px;transition:border-color .25s,background .25s;
+}
+.about-point:hover{border-color:rgba(238,88,45,.35);background:rgba(238,88,45,.05)}
+.about-point .ico{flex-shrink:0;width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:rgba(238,88,45,.14);color:var(--orange-soft)}
+.about-point .ico svg{width:15px;height:15px}
+.about-point .txt strong{display:block;color:var(--text);font-size:12.5px;font-weight:600;line-height:1.25}
+.about-point .txt span{color:var(--muted);font-size:10.5px;line-height:1.3}
+
+/* ===== SISTEMAS ===== */
+.systems{padding:36px 0 36px}
+.sys-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.sys-grid .sys-card:first-child{grid-column:1 / -1}
+@media(max-width:560px){.sys-grid{grid-template-columns:1fr}}
+
+.sys-card{
+  position:relative;background:linear-gradient(175deg,var(--panel),var(--panel-2));
+  border:1px solid var(--line);border-radius:18px;overflow:hidden;cursor:zoom-in;
+  display:flex;flex-direction:column;
+  transition:transform .32s cubic-bezier(.34,1.3,.64,1),border-color .3s,box-shadow .3s;
+  box-shadow:0 12px 30px -16px rgba(0,0,0,.7);
+}
+.sys-card:hover{transform:translateY(-7px);border-color:rgba(238,88,45,.45);box-shadow:0 24px 46px -18px rgba(0,0,0,.8),0 0 34px -12px rgba(238,88,45,.4)}
+
+.sys-img-wrap{position:relative;background:#060606;overflow:hidden}
+.sys-img-wrap img{width:100%;height:auto;display:block;transition:transform .55s cubic-bezier(.4,0,.2,1)}
+.sys-card:hover .sys-img-wrap img{transform:scale(1.04)}
+.sys-grid .sys-card:first-child .sys-img-wrap img{max-height:340px;object-fit:cover;object-position:center}
+.sys-grid .sys-card:not(:first-child) .sys-img-wrap img{max-height:430px;object-fit:cover;object-position:right center}
+/* línea de escaneo naranja */
+.sys-img-wrap::after{
+  content:"";position:absolute;left:0;right:0;height:2px;top:0;
+  background:linear-gradient(90deg,transparent,var(--orange),transparent);
+  opacity:0;box-shadow:0 0 14px 2px rgba(238,88,45,.6);
+}
+.sys-card:hover .sys-img-wrap::after{animation:scan 1.5s ease-in-out infinite;opacity:1}
+@keyframes scan{0%{top:0}100%{top:100%}}
+
+.sys-tag{
+  position:absolute;top:10px;left:10px;z-index:3;display:inline-flex;align-items:center;gap:5px;
+  padding:5px 11px;border-radius:7px;font-family:'JetBrains Mono',monospace;
+  font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+  background:var(--orange);color:#1a0600;box-shadow:0 4px 12px -3px rgba(238,88,45,.6);
+}
+
+.sys-body{padding:15px 15px 17px;display:flex;flex-direction:column;flex:1;border-top:1px solid var(--line);background:rgba(0,0,0,.3)}
+.sys-body h3{font-family:'Poppins',sans-serif;font-size:17px;font-weight:800;letter-spacing:-.02em;margin-bottom:4px}
+.sys-body h3 b{color:var(--orange)}
+.sys-body .sub{color:var(--muted-2);font-size:12px;line-height:1.45;margin-bottom:13px;flex:1}
+.sys-stats{display:flex;gap:7px;padding-top:11px;border-top:1px solid var(--line)}
+.sys-stats .st{flex:1;text-align:center}
+.sys-stats .st .v{font-family:'Poppins',sans-serif;font-size:15px;font-weight:800;line-height:1;color:var(--orange)}
+.sys-stats .st .l{font-size:8.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-top:5px;font-family:'JetBrains Mono',monospace}
+
+.sys-note{text-align:center;margin-top:18px;font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--muted);letter-spacing:.08em}
+
+/* ===== VS (operar solo vs con Apolo) ===== */
+.vs{padding:30px 0 20px}
+.vs-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:560px){.vs-grid{grid-template-columns:1fr}}
+.vs-card{border-radius:16px;padding:22px 20px;position:relative;overflow:hidden}
+.vs-solo{background:rgba(255,255,255,.02);border:1px solid var(--line)}
+.vs-apolo{background:linear-gradient(170deg,rgba(238,88,45,.1),rgba(238,88,45,.03));border:1px solid rgba(238,88,45,.3)}
+.vs-card h3{font-family:'Poppins',sans-serif;font-size:13px;font-weight:800;letter-spacing:.02em;margin-bottom:15px;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.vs-solo h3{color:var(--muted-2)}
+.vs-apolo h3{color:var(--orange)}
+.vs-card ul{list-style:none}
+.vs-card li{font-size:12.5px;color:var(--muted-2);padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:flex-start;gap:9px;line-height:1.4}
+.vs-card li:last-child{border-bottom:none}
+.vs-card .mk{flex-shrink:0;font-weight:800;font-size:13px;line-height:1.3}
+.vs-solo .mk{color:var(--muted)}
+.vs-apolo .mk{color:var(--orange)}
+.vs-apolo li{color:var(--text)}
+
+/* ===== CTA FINAL ===== */
+.final{padding:40px 0 20px}
+.final-card{
+  background:linear-gradient(165deg,rgba(238,88,45,.14),rgba(18,18,18,.9));
+  border:1px solid rgba(238,88,45,.32);border-radius:24px;padding:40px 28px;text-align:center;
+  position:relative;overflow:hidden;box-shadow:0 30px 70px -34px rgba(238,88,45,.4);
+}
+.final-card::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(500px 280px at 50% 0%, rgba(238,88,45,.2), transparent 64%)}
+.final-card h2{
+  font-family:'Poppins',sans-serif;font-weight:900;text-transform:uppercase;
+  font-size:clamp(26px,6vw,42px);letter-spacing:-.03em;line-height:1;margin-bottom:12px;position:relative;
+}
+.final-card h2 .key{text-transform:none;font-size:1.12em}
+.final-card p{color:var(--muted-2);font-size:14.5px;max-width:420px;margin:0 auto 26px;position:relative}
+.final-card p b{color:var(--text);font-weight:600}
+.final-btns{display:flex;flex-direction:column;gap:11px;max-width:400px;margin:0 auto;position:relative}
+.final-btns .btn{width:100%}
+.final-free{margin-top:16px;font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;position:relative}
+
+/* ===== LIGHTBOX ===== */
+.lightbox{display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.93);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:28px;cursor:zoom-out;animation:lbIn .3s ease}
+@keyframes lbIn{from{opacity:0}to{opacity:1}}
+.lightbox.active{display:flex}
+.lightbox-img{max-width:96%;max-height:92vh;border-radius:12px;box-shadow:0 40px 80px -20px rgba(0,0,0,.9),0 0 60px -10px rgba(238,88,45,.3);border:1px solid rgba(238,88,45,.25)}
+.lightbox-close{position:absolute;top:18px;right:24px;color:#fff;font-size:38px;font-weight:300;cursor:pointer;line-height:1;width:46px;height:46px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);transition:background .2s,transform .2s}
+.lightbox-close:hover{background:rgba(238,88,45,.25);transform:rotate(90deg)}
+
+/* ===== FOOTER ===== */
+footer{border-top:1px solid var(--line);padding:24px 20px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.08em;margin-top:20px}
+footer a{color:var(--orange-soft);text-decoration:none}
+.disclaimer{font-size:10px;color:var(--muted);text-align:center;padding:0 20px 22px;max-width:640px;margin:0 auto;line-height:1.65}
+.disclaimer b{color:var(--muted-2)}
+
+/* ===== Reveal ===== */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.2,.6,.2,1),transform .7s cubic-bezier(.2,.6,.2,1)}
+.reveal.in{opacity:1;transform:translateY(0)}
+.reveal.d1{transition-delay:.08s}.reveal.d2{transition-delay:.16s}.reveal.d3{transition-delay:.24s}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none}.hero-logo,.eyebrow .ld{animation:none}}
+</style>
+</head>
+<body>
+
+<canvas id="cosmos-canvas"></canvas>
+<div class="bg-atmosphere"></div>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-inner" id="ticker"></div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <img src="logo.png" alt="Apolo" class="hero-logo" />
+    <div class="eyebrow"><span class="ld"></span> Comunidad de trading · En vivo</div>
+    <h1>Escáneres reales,<br/><span class="key">comunidad</span> de verdad.</h1>
+    <p class="lead">Herramientas validadas con <b>años de estadísticas reales</b> y una comunidad privada donde no operas solo. Entra gratis y compruébalo tú mismo.</p>
+
+    <div class="btn-duo">
+      <a href="https://wa.link/7yufq9" target="_blank" rel="noopener" class="btn btn-wa">
+        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+        <span>WhatsApp</span>
+      </a>
+      <a href="https://t.me/MetodoApolo" target="_blank" rel="noopener" class="btn btn-tg">
+        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        <span>Telegram</span>
+      </a>
+    </div>
+    <p class="hero-sub">Acceso inmediato · Sin registro · Sin tarjeta</p>
+
+    <!-- Stats animados -->
+    <div class="stats-strip reveal">
+      <div class="stat-item"><div class="num" data-count="3" data-suffix="">0</div><div class="lbl">Escáneres</div></div>
+      <div class="stat-item"><div class="num" data-count="400" data-suffix="+">0</div><div class="lbl">Operaciones</div></div>
+      <div class="stat-item"><div class="num" data-count="24" data-suffix="/7">0</div><div class="lbl">Comunidad</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- QUIÉNES SOMOS -->
+<section class="about">
+  <div class="container">
+    <div class="about-card reveal">
+      <span class="about-flag">Quiénes somos</span>
+      <h2>Herramientas <span class="key">reales</span>, comunidad de verdad</h2>
+      <p>Desarrollamos <b>herramientas validadas con años de estadísticas reales</b>, optimizadas para cada mercado. Y lo que nos diferencia: una <b>comunidad privada</b> con acompañamiento completo, no un indicador y ya.</p>
+
+      <div class="about-points">
+        <div class="about-point">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-3"/></svg></span>
+          <span class="txt"><strong>Estadísticas de años</strong><span>Datos reales y auditables.</span></span>
+        </div>
+        <div class="about-point">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></span>
+          <span class="txt"><strong>Operativas en vivo</strong><span>Operamos juntos cada semana.</span></span>
+        </div>
+        <div class="about-point">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></span>
+          <span class="txt"><strong>Paso a paso completo</strong><span>Todo grabado, desde cero.</span></span>
+        </div>
+        <div class="about-point">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></span>
+          <span class="txt"><strong>Contacto directo</strong><span>Soporte por WhatsApp y Telegram.</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SISTEMAS -->
+<section class="systems">
+  <div class="container">
+    <div class="sec-head reveal">
+      <span class="kicker">— Escáneres en vivo</span>
+      <h2>Nuestros <span class="key">sistemas</span></h2>
+      <p>Tres escáneres especializados, cada uno optimizado para su mercado.</p>
+    </div>
+
+    <div class="sys-grid reveal d1">
+      <div class="sys-card" data-img="apolo.png">
+        <div class="sys-img-wrap">
+          <span class="sys-tag">Multi-activo</span>
+          <img src="apolo.png" alt="Apolo Scanner en NAS100" loading="lazy" />
+        </div>
+        <div class="sys-body">
+          <h3>Apolo</h3>
+          <p class="sub">Forex, metales, índices y cripto. Se adapta a cualquier activo y temporalidad.</p>
+          <div class="sys-stats">
+            <div class="st"><div class="v">79.2%</div><div class="l">Win Rate</div></div>
+            <div class="st"><div class="v">3.59</div><div class="l">Profit F.</div></div>
+            <div class="st"><div class="v">1–5★</div><div class="l">Calidad</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sys-card" data-img="apolo-gold.png">
+        <div class="sys-img-wrap">
+          <span class="sys-tag">Oro · XAUUSD</span>
+          <img src="apolo-gold.png" alt="Apolo Gold en XAUUSD" loading="lazy" />
+        </div>
+        <div class="sys-body">
+          <h3>Apolo <b>Gold</b></h3>
+          <p class="sub">Nuestro escáner estrella, optimizado para operar el oro en marcos cortos.</p>
+          <div class="sys-stats">
+            <div class="st"><div class="v">75.9%</div><div class="l">Win Rate</div></div>
+            <div class="st"><div class="v">3.15</div><div class="l">Profit F.</div></div>
+            <div class="st"><div class="v">1–5★</div><div class="l">Calidad</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sys-card" data-img="apolo-deriv.png">
+        <div class="sys-img-wrap">
+          <span class="sys-tag">Sintéticos · Deriv</span>
+          <img src="apolo-deriv.png" alt="Apolo Deriv en Boom 900" loading="lazy" />
+        </div>
+        <div class="sys-body">
+          <h3>Apolo <b>Deriv</b></h3>
+          <p class="sub">Para índices sintéticos Crash y Boom, operando a favor de la probabilidad.</p>
+          <div class="sys-stats">
+            <div class="st"><div class="v">76%</div><div class="l">Efectividad</div></div>
+            <div class="st"><div class="v">4.8</div><div class="l">Profit F.</div></div>
+            <div class="st"><div class="v">1–5★</div><div class="l">Calidad</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="sys-note">Histórico visible · sin repintado · toca una imagen para ampliarla</p>
+  </div>
+</section>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <span class="lightbox-close">&times;</span>
+  <img class="lightbox-img" id="lightbox-img" alt="" />
+</div>
+
+<!-- VS -->
+<section class="vs">
+  <div class="container">
+    <div class="sec-head reveal">
+      <span class="kicker">— Por qué entrar</span>
+      <h2>Solo <span class="key">vs</span> con Apolo</h2>
+    </div>
+    <div class="vs-grid reveal d1">
+      <div class="vs-card vs-solo">
+        <h3>Operando solo</h3>
+        <ul>
+          <li><span class="mk">—</span><span>Horas pegado al gráfico sin saber qué hacer</span></li>
+          <li><span class="mk">—</span><span>Decisiones por miedo o impulso</span></li>
+          <li><span class="mk">—</span><span>Sin nadie que valide tu análisis</span></li>
+          <li><span class="mk">—</span><span>Aprendizaje lento y a ciegas</span></li>
+        </ul>
+      </div>
+      <div class="vs-card vs-apolo">
+        <h3>Con Apolo</h3>
+        <ul>
+          <li><span class="mk">✓</span><span>Escáneres que filtran el mercado por ti</span></li>
+          <li><span class="mk">✓</span><span>Operativas en vivo y paso a paso grabado</span></li>
+          <li><span class="mk">✓</span><span>Contacto directo con el equipo</span></li>
+          <li><span class="mk">✓</span><span>Una comunidad que avanza contigo</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="final">
+  <div class="container">
+    <div class="final-card reveal">
+      <h2>Entra <span class="key">gratis</span> hoy</h2>
+      <p>Escríbenos por WhatsApp o únete al canal de Telegram. <b>Sin costo y sin compromiso</b> — mira por dentro y decide.</p>
+      <div class="final-btns">
+        <a href="https://wa.link/7yufq9" target="_blank" rel="noopener" class="btn btn-wa">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+          <span>Escribir por WhatsApp</span>
+        </a>
+        <a href="https://t.me/MetodoApolo" target="_blank" rel="noopener" class="btn btn-tg">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+          <span>Unirme al canal de Telegram</span>
+        </a>
+      </div>
+      <p class="final-free">★ 100% gratis · Acceso inmediato</p>
+    </div>
+  </div>
+</section>
+
+<!-- DISCLAIMER -->
+<div class="disclaimer">
+  ⚠ <b>Aviso de riesgo:</b> El trading de instrumentos financieros conlleva alto riesgo. Nuestras herramientas y la comunidad son servicios educativos y de asistencia; no constituyen asesoramiento financiero. Cada usuario es responsable de sus decisiones.
+</div>
+
+<footer>
+  © 2026 APOLO · <a href="https://t.me/MetodoApolo" target="_blank" rel="noopener">@MetodoApolo</a>
+</footer>
+
+<script>
+/* ===== Ticker (generado para evitar repetición manual) ===== */
+(function(){
+  const items=['🥇 XAU/USD','💱 EUR/USD','💎 GBP/USD','📊 US30','💻 NAS100','📈 SPX500','₿ BTC/USDT','⚡ Boom & Crash','★ Comunidad 24/7'];
+  const t=document.getElementById('ticker');
+  let html='';
+  for(let r=0;r<2;r++){items.forEach(i=>{html+='<span>'+i+'</span><span class="ticker-sep">·</span>'});}
+  t.innerHTML=html;
+})();
+
+/* ===== Fondo cósmico (naranja) ===== */
+(function cosmos(){
+  const canvas=document.getElementById('cosmos-canvas');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let w,h,stars=[],shoots=[];
+  const N=window.innerWidth<720?48:95;
+  function resize(){
+    w=canvas.width=window.innerWidth*devicePixelRatio;
+    h=canvas.height=window.innerHeight*devicePixelRatio;
+    canvas.style.width=window.innerWidth+'px';
+    canvas.style.height=window.innerHeight+'px';
+  }
+  resize();window.addEventListener('resize',resize);
+  for(let i=0;i<N;i++){
+    stars.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.3*devicePixelRatio+0.3,
+      a:Math.random()*0.5+0.2,vx:(Math.random()-0.5)*0.05,vy:(Math.random()-0.5)*0.05,
+      tw:Math.random()*0.018+0.005,d:1,g:Math.random()>0.82});
+  }
+  function spawn(){
+    if(Math.random()>0.996){
+      shoots.push({x:Math.random()*w*0.6,y:Math.random()*h*0.4,
+        len:70*devicePixelRatio+Math.random()*70*devicePixelRatio,
+        spd:4*devicePixelRatio+Math.random()*3*devicePixelRatio,
+        ang:Math.PI/4+(Math.random()-0.5)*0.3,life:1});
+    }
+  }
+  function draw(){
+    ctx.clearRect(0,0,w,h);
+    for(const s of stars){
+      s.x+=s.vx;s.y+=s.vy;
+      if(s.x<0)s.x=w;if(s.x>w)s.x=0;if(s.y<0)s.y=h;if(s.y>h)s.y=0;
+      s.a+=s.tw*s.d;if(s.a>0.85||s.a<0.15)s.d*=-1;
+      ctx.beginPath();
+      ctx.fillStyle=s.g?`rgba(238,88,45,${s.a})`:`rgba(255,255,255,${s.a*0.8})`;
+      ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fill();
+    }
+    spawn();shoots=shoots.filter(s=>s.life>0);
+    for(const s of shoots){
+      const dx=Math.cos(s.ang)*s.len,dy=Math.sin(s.ang)*s.len;
+      const g=ctx.createLinearGradient(s.x,s.y,s.x+dx,s.y+dy);
+      g.addColorStop(0,`rgba(238,88,45,${0.85*s.life})`);
+      g.addColorStop(1,'rgba(238,88,45,0)');
+      ctx.strokeStyle=g;ctx.lineWidth=1.6*devicePixelRatio;
+      ctx.beginPath();ctx.moveTo(s.x,s.y);ctx.lineTo(s.x+dx,s.y+dy);ctx.stroke();
+      s.x+=Math.cos(s.ang)*s.spd;s.y+=Math.sin(s.ang)*s.spd;s.life-=0.013;
+    }
+    requestAnimationFrame(draw);
+  }
+  if(reduce){ // una sola pasada estática
+    for(const s of stars){ctx.beginPath();ctx.fillStyle=s.g?`rgba(238,88,45,${s.a})`:`rgba(255,255,255,${s.a*0.8})`;ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fill();}
+  } else { draw(); }
+})();
+
+/* ===== Reveal on scroll ===== */
+const io=new IntersectionObserver(es=>{
+  es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}});
+},{threshold:.14});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* ===== Contadores animados ===== */
+(function(){
+  const nums=document.querySelectorAll('.num[data-count]');
+  const cio=new IntersectionObserver(es=>{
+    es.forEach(e=>{
+      if(!e.isIntersecting)return;
+      const el=e.target,target=+el.dataset.count,suf=el.dataset.suffix||'';
+      const dur=1200,t0=performance.now();
+      function tick(now){
+        const p=Math.min((now-t0)/dur,1);
+        const val=Math.round((1-Math.pow(1-p,3))*target);
+        el.textContent=val+suf;
+        if(p<1)requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+      cio.unobserve(el);
+    });
+  },{threshold:.6});
+  nums.forEach(n=>cio.observe(n));
+})();
+
+/* ===== LIGHTBOX ===== */
+(function(){
+  const lb=document.getElementById('lightbox');
+  const lbImg=document.getElementById('lightbox-img');
+  const closeBtn=document.querySelector('.lightbox-close');
+  if(!lb)return;
+  document.querySelectorAll('.sys-card').forEach(card=>{
+    card.addEventListener('click',()=>{
+      const src=card.dataset.img;if(!src)return;
+      lbImg.src=src;lb.classList.add('active');document.body.style.overflow='hidden';
+    });
+  });
+  function close(){lb.classList.remove('active');document.body.style.overflow='';setTimeout(()=>lbImg.src='',300);}
+  lb.addEventListener('click',e=>{if(e.target===lb||e.target===closeBtn)close()});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
+})();
+</script>
+
+</body>
+</html>
